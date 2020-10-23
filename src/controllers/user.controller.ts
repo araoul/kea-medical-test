@@ -18,6 +18,7 @@ import {
   del,
   requestBody,
   HttpErrors,
+  SchemaObject,
 } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository, Credentials} from '../repositories';
@@ -39,6 +40,28 @@ export class NewUserRequest extends User {
   })
   password: string;
 }
+const CredentialsSchema: SchemaObject = {
+  type: 'object',
+  required: ['email', 'password'],
+  properties: {
+    email: {
+      type: 'string',
+      format: 'email',
+    },
+    password: {
+      type: 'string',
+      minLength: 8,
+    },
+  },
+};
+
+export const CredentialsRequestBody = {
+  description: 'The input of login function',
+  required: true,
+  content: {
+    'application/json': {schema: CredentialsSchema},
+  },
+};
 
 export class UserController {
   constructor(
@@ -136,24 +159,7 @@ export class UserController {
     },
   })
   async login(
-  //  @requestBody(CredentialsRequestBody) 
-    @requestBody({
-      description: 'The input of login function',
-      required: true,
-      // content: {
-      //       'application/json': {schema: CredentialsSchema},
-      //     },
-        
-            content: {
-              'application/json': {
-                schema: getModelSchemaRef(NewUserRequest, {
-                  title: 'LoginUser',
-                  exclude: ['id'],
-                }),
-              },
-            },
-
-    })
+   @requestBody(CredentialsRequestBody) 
     credentials: Credentials,
   ): Promise<{token: string}> {
     //s'assurer  si l'utilisateur et que son mot de passe soit correct

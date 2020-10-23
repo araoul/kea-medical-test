@@ -15,7 +15,7 @@ Suivre les étapes suivantes pour cloner le projet.
 
 ```sh
 $ npm i -g @loopback/cli
-$ git clone  git clone https://github.com/kea-medical-test.git
+$ git clone  git clone https://github.com/araoul/kea-medical-test.git
 $ cd kea-medical-test
 $ npm i
 $ npm start
